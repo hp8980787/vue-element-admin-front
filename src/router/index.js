@@ -88,6 +88,18 @@ export const constantRoutes = [
         meta: { title: 'Form', icon: 'form' }
       }
     ]
+  },{
+    path: '/users',
+    component:Layout,
+    redirect:'/users/info',
+    children: [{
+      path:'info',
+      name:'users.index',
+      component:()=>import('@/views/users/index'),
+      meta:{title:'个人用户信息修改',icon:'user',}
+
+    }
+    ]
   }
 ]
 
