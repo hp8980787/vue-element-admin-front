@@ -144,6 +144,31 @@ export const asyncRoutes = [{
                 noCache: true,
                 affix: true
             }
+        }, {
+            path: 'users',
+            name: 'permissions.users',
+
+            component: () =>
+                import ('@/views/permission/users'),
+            meta: {
+                title: '用户管理',
+                icon: '',
+                roles: ['admin'],
+                affix: true,
+                noCache: true,
+            },
+            children: [{
+                hidden: true,
+                path: 'assign-roles',
+                name: 'permissions.users.assign',
+                component: () =>
+                    import ('@/views/permission/assign-roles'),
+                meta: {
+                    title: '用户添加角色',
+                    roles: ['admin'],
+                    affix: true,
+                }
+            }],
         }]
     }, {
         path: '/nested',
