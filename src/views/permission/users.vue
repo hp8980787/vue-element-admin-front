@@ -24,7 +24,7 @@
       width="120">
       <template slot-scope="scope">
        <el-button size="mini" type="info">修改用户</el-button>
-     <el-button size="mini" type="primary"> <router-link to="/permission/users/assign-roles">分配角色</router-link></el-button>
+     <el-button size="mini" type="primary"> <router-link :to="`/permission/users/assign-roles/${scope.row.id}`">分配角色</router-link></el-button>
      <el-button size="mini" type="warning">删除用户</el-button>
       </template>
     </el-table-column>

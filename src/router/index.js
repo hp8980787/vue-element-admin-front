@@ -159,8 +159,9 @@ export const asyncRoutes = [{
             },
             children: [{
                 hidden: true,
-                path: 'assign-roles',
+                path: 'assign-roles/:id',
                 name: 'permissions.users.assign',
+                props:true,
                 component: () =>
                     import ('@/views/permission/assign-roles'),
                 meta: {
