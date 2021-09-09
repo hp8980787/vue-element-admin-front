@@ -149,7 +149,7 @@ export const asyncRoutes = [{
             name: 'permissions.users',
 
             component: () =>
-                import ('@/views/permission/users'),
+                import ('@/views/permission/users/index'),
             meta: {
                 title: '用户管理',
                 icon: '',
@@ -160,12 +160,24 @@ export const asyncRoutes = [{
             children: [{
                 hidden: true,
                 path: 'assign-roles/:id',
-                name: 'permissions.users.assign',
-                props:true,
+                name: 'permissions.users.assign-roles',
+                props: true,
                 component: () =>
-                    import ('@/views/permission/assign-roles'),
+                    import ('@/views/permission/users/assign-roles'),
                 meta: {
                     title: '用户添加角色',
+                    roles: ['admin'],
+                    affix: true,
+                }
+            }, {
+                hidden: true,
+                path: 'assign-domains/:id',
+                name: 'permissions.users.assgign-domains',
+                props: true,
+                component: () =>
+                    import ('@/views/permission/users/assign-domains'),
+                meta: {
+                    tile: '给用户分配域名',
                     roles: ['admin'],
                     affix: true,
                 }

@@ -1,8 +1,6 @@
 <template>
   <el-row>
-    <el-button type="primary" @click="dialogVisbleRole = true"
-      >新增角色</el-button
-    >
+    <el-button type="primary" @click="addInit()">新增角色</el-button>
     <el-col :span="24">
       <el-table :data="roles" border style="width: 100%">
         <el-table-column label="创建日期" prop="created_at"></el-table-column>
@@ -20,7 +18,9 @@
               >
             </el-popconfirm>
 
-            <el-button type="info" size="mini">更新</el-button>
+            <el-button type="info" @click="updateRoles(scope.row)" size="mini"
+              >更新</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -68,6 +68,10 @@ export default {
     this.getRolesList();
   },
   methods: {
+    addInit() {
+      this.type = "add";
+      this.dialogVisbleRole = true;
+    },
     async getRolesList() {
       let data = await request.get("/roles");
       this.roles = data.data;
@@ -82,11 +86,23 @@ export default {
       this.dialogVisbleRole = false;
       this.getRolesList();
     },
-    async updateRole() {},
+    async updateRole(roleData) {
+      let data = await request.put(`/roles/${this.form.id}`, this.form);
+      if (data.code == 200) {
+        this.$message({ message: "修改成功", type: "success" });
+        this.dialogVisbleRole = false;
+        this.getRolesList();
+      }
+    },
     async deleteRole(id) {
       let data = await request.delete(`/roles/${id}`);
-      this.$message({message:'删除成功',type:'success',});
+      this.$message({ message: "删除成功", type: "success" });
       this.getRolesList();
+    },
+    updateRoles(data) {
+      this.dialogVisbleRole = true;
+      this.form = data;
+      this.type = "edit";
     },
   },
 };
