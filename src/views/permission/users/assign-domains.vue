@@ -1,12 +1,13 @@
 <template>
   <el-row>
-   
-      <transfer
+   <el-col :spam=24>
+     <transfer
+        @getTransferData="transferSubmit"
         :transferModel="userDomains"
         :transferData="domains"
         :titles="titles"
       ></transfer>
-   
+   </el-col>
   </el-row>
 </template>
 
@@ -26,7 +27,7 @@ export default {
   },
   mounted() {
     this.getDomainsList();
-
+    this.getUserDoaminsList();
     console.log(this.id);
   },
   methods: {
@@ -35,8 +36,25 @@ export default {
       for (let i in data) {
         this.domains.push({ label: data[i].url, key: data[i].id });
       }
-      console.log(data);
     },
+    transferSubmit(data){
+      this.updateUserDoamin(data);
+    },async updateUserDoamin(domains){
+      
+      let { data } = await request.post('/users-domains',{
+        id:this.id,
+        domains:domains,
+      });
+      this.$message({message:'修改成功',type:'success'});
+    },async getUserDoaminsList(){
+      let { data } = await request.get('/users-domains',{
+        params: {id:this.id}
+      });
+      for(let i in data.domains){
+        this.userDomains.push(data.domains[i].id);
+      }
+      console.log(data.domains)
+    }
   },
 };
 </script>

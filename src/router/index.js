@@ -184,65 +184,39 @@ export const asyncRoutes = [{
             }],
         }]
     }, {
-        path: '/nested',
+        path: '/domains',
+        name: 'domains',
         component: Layout,
-        redirect: '/nested/menu1',
-        name: 'Nested',
-        meta: {
-            title: 'Nested',
-            icon: 'nested'
-        },
+        redirect: 'index',
         children: [{
-                path: 'menu1',
-                component: () =>
-                    import ('@/views/nested/menu1/index'), // Parent router-view
-                name: 'Menu1',
-                meta: { title: 'Menu1' },
-                children: [{
-                        path: 'menu1-1',
-                        component: () =>
-                            import ('@/views/nested/menu1/menu1-1'),
-                        name: 'Menu1-1',
-                        meta: { title: 'Menu1-1' }
-                    },
-                    {
-                        path: 'menu1-2',
-                        component: () =>
-                            import ('@/views/nested/menu1/menu1-2'),
-                        name: 'Menu1-2',
-                        meta: { title: 'Menu1-2' },
-                        children: [{
-                                path: 'menu1-2-1',
-                                component: () =>
-                                    import ('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                                name: 'Menu1-2-1',
-                                meta: { title: 'Menu1-2-1' }
-                            },
-                            {
-                                path: 'menu1-2-2',
-                                component: () =>
-                                    import ('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                                name: 'Menu1-2-2',
-                                meta: { title: 'Menu1-2-2' }
-                            }
-                        ]
-                    },
-                    {
-                        path: 'menu1-3',
-                        component: () =>
-                            import ('@/views/nested/menu1/menu1-3'),
-                        name: 'Menu1-3',
-                        meta: { title: 'Menu1-3' }
-                    }
-                ]
-            },
-            {
-                path: 'menu2',
-                component: () =>
-                    import ('@/views/nested/menu2/index'),
-                meta: { title: 'menu2' }
+            path: 'index',
+            name: 'domains.index',
+            component: () =>
+                import ('@/views/domains/index'),
+            meta: {
+                title: '网站管理',
+                roles: ['admin'],
+                icon: 'web',
+                affix: true,
             }
-        ]
+        }]
+    }, {
+        path: '/orders',
+        name: 'orders',
+        component: Layout,
+        redirect: 'index',
+        children: [{
+            path: 'index',
+            name: 'orders.index',
+            component: () =>
+                import ('@/views/orders/index'),
+            meta: {
+                title: '订单管理',
+                icon: 'order',
+                affix: true,
+                roles: ['admin']
+            }
+        }]
     },
 
     {

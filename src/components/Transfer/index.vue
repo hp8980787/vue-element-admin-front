@@ -1,5 +1,5 @@
 <template>
-<el-row>
+<el-row style="margin-top:20px">
      <el-col :span="20" :offset="3" >
   <el-transfer
     :titles="titles"
@@ -7,8 +7,8 @@
     :data="transferData"
   ></el-transfer>
  </el-col>
- <el-col :span="20">
-       <el-button type="primary" style="margin:0 auto" >提交</el-button>
+ <el-col :span="22" style="margin-top:20px">
+       <el-button  type="primary" @click="submitTransfer" style="display:block;margin:0 auto" >提交</el-button>
  </el-col>
 </el-row>
 
@@ -39,7 +39,9 @@ export default {
   methods: {
     transferInit() {
       this.model = this.transferModel;
-    },
+    },submitTransfer(){
+      this.$emit('getTransferData',this.model);
+    }
   },
 };
 </script>
