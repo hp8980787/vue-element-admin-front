@@ -3,8 +3,8 @@
     <el-col :span="12" :offset="6">
       <el-transfer :titles="titles" v-model="roles" :data="data"></el-transfer>
     </el-col>
-    <el-col :span="10" :offset="10" style="margin-top: 20px">
-      <el-button @click="submitForm" type="primary">提交</el-button>
+    <el-col :span="10"  >
+      <el-button style="display:block;margin: 0 auto"  @click="submitForm" type="primary">提交</el-button>
     </el-col>
   </el-row>
 </template>

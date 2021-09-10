@@ -28,14 +28,15 @@ export default {
   mounted() {
     this.getDomainsList();
     this.getUserDoaminsList();
-    console.log(this.id);
   },
   methods: {
     async getDomainsList() {
-      let { data } = await request.get("domains");
+      let { data } = await request.get("/domains-all");
+      console.log(data,1);
       for (let i in data) {
         this.domains.push({ label: data[i].url, key: data[i].id });
       }
+      console.log(this.domains);
     },
     transferSubmit(data){
       this.updateUserDoamin(data);
@@ -53,7 +54,7 @@ export default {
       for(let i in data.domains){
         this.userDomains.push(data.domains[i].id);
       }
-      console.log(data.domains)
+      console.log(this.userDomains)
     }
   },
 };
