@@ -3,7 +3,7 @@
 <el-row>
   <el-col :span="24" >
      <div class="add-button">
-    <el-button type="primary">新增网站</el-button>
+    <el-button type="primary"> <router-link to='/databases/create'>新增网站</router-link> </el-button>
      </div>
     </el-col> 
   <el-col :span="24">

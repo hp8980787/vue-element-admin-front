@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     async getDomainsList() {
-      let { data } = await request.get("/domains-all");
+      let { data } = await request.get("/databases-all");
       console.log(data,1);
       for (let i in data) {
         this.domains.push({ label: data[i].url, key: data[i].id });

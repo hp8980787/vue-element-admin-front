@@ -181,20 +181,35 @@ export const asyncRoutes = [{
                     roles: ['admin'],
                     affix: true,
                 }
-            }],
+            }, ],
         }]
     }, {
-        path: '/domains',
-        name: 'domains',
+        path: '/databases',
+        name: 'databases',
         component: Layout,
         redirect: 'index',
+        meta: {
+            title: '网站管理'
+        },
         children: [{
             path: 'index',
-            name: 'domains.index',
+            name: 'databases.index',
             component: () =>
-                import ('@/views/domains/index'),
+                import ('@/views/databases/index'),
             meta: {
                 title: '网站管理',
+                roles: ['admin'],
+                icon: 'web',
+                affix: true,
+            }
+        }, {
+            path: 'create',
+            name: 'databases.create',
+            hidden: true,
+            component: () =>
+                import ('@/views/databases/create'),
+            meta: {
+                title: '新增网站数据库',
                 roles: ['admin'],
                 icon: 'web',
                 affix: true,
