@@ -188,16 +188,14 @@ export const asyncRoutes = [{
         name: 'databases',
         component: Layout,
         redirect: 'index',
-        meta: {
-            title: '网站管理'
-        },
+
         children: [{
             path: 'index',
             name: 'databases.index',
             component: () =>
                 import ('@/views/databases/index'),
             meta: {
-                title: '网站管理',
+                title: '数据库管理',
                 roles: ['admin'],
                 icon: 'web',
                 affix: true,
@@ -230,6 +228,23 @@ export const asyncRoutes = [{
                 icon: 'order',
                 affix: true,
                 roles: ['admin']
+            }
+        }]
+    }, {
+        path: '/domains',
+        name: 'domains',
+        component: Layout,
+        redirect: 'index',
+        children: [{
+            path: 'index',
+            name: 'domains.index',
+            component: () =>
+                import ('@/views/domains/index'),
+            meta: {
+                title: '域名管理',
+                icon: 'web',
+                affix: true,
+                roles: ['admins', 'visitor', 'operation']
             }
         }]
     },
