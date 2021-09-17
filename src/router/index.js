@@ -100,7 +100,7 @@ export const constantRoutes = [{
             name: 'users.index',
             component: () =>
                 import ('@/views/users/index'),
-            meta: { title: '个人用户信息修改', icon: 'user', }
+            meta: { title: '个人用户信息修改', icon: 'user' }
 
         }]
     }
@@ -126,11 +126,10 @@ export const asyncRoutes = [{
             component: () =>
                 import ('@/views/permission/permission'),
             meta: {
-                title: "权限",
+                title: '权限',
                 icon: '',
                 roles: ['admin'],
                 noCache: true,
-                affix: true
             }
         }, {
             path: 'roles',
@@ -142,7 +141,7 @@ export const asyncRoutes = [{
                 icon: '',
                 roles: ['admin'],
                 noCache: true,
-                affix: true
+
             }
         }, {
             path: 'users',
@@ -154,8 +153,7 @@ export const asyncRoutes = [{
                 title: '用户管理',
                 icon: '',
                 roles: ['admin'],
-                affix: true,
-                noCache: true,
+                noCache: true
             },
             children: [{
                 hidden: true,
@@ -167,7 +165,6 @@ export const asyncRoutes = [{
                 meta: {
                     title: '用户添加角色',
                     roles: ['admin'],
-                    affix: true,
                 }
             }, {
                 hidden: true,
@@ -179,38 +176,64 @@ export const asyncRoutes = [{
                 meta: {
                     tile: '给用户分配域名',
                     roles: ['admin'],
-                    affix: true,
                 }
-            }, ],
+            }]
         }]
     }, {
         path: '/databases',
         name: 'databases',
         component: Layout,
+        meta: {
+            title: '数据库管理',
+            icon: 'database',
+            roles: ['admin'],
+        },
         redirect: 'index',
-
         children: [{
             path: 'index',
             name: 'databases.index',
             component: () =>
                 import ('@/views/databases/index'),
             meta: {
-                title: '数据库管理',
+                title: '数据库',
                 roles: ['admin'],
-                icon: 'web',
-                affix: true,
-            }
+                icon: 'database',
+            },
+
         }, {
-            path: 'create',
-            name: 'databases.create',
-            hidden: true,
+            path: 'action',
+            name: 'databases.action',
             component: () =>
-                import ('@/views/databases/create'),
+                import ('@/views/router-bridge/bridge.vue'),
             meta: {
-                title: '新增网站数据库',
+                noCache: true,
+                title: '数据库',
                 roles: ['admin'],
-                icon: 'web',
-                affix: true,
+                icon: 'database',
+
+            },
+            children: [{
+                path: 'create',
+                name: 'database.action.create',
+                component: () =>
+                    import ('@/views/databases/create'),
+                meta: {
+                    noCache: true,
+                    title: '数据库添加',
+                    roles: ['admin'],
+                    icon: 'database',
+                }
+            }]
+        }, {
+            path: 'tables',
+            name: 'databases.tables',
+            component: () =>
+                import ('@/views/databases/tables'),
+            meta: {
+                title: '表管理',
+                icon: 'table',
+                roles: ['admin'],
+
             }
         }]
     }, {
@@ -226,7 +249,6 @@ export const asyncRoutes = [{
             meta: {
                 title: '订单管理',
                 icon: 'order',
-                affix: true,
                 roles: ['admin']
             }
         }]
@@ -243,7 +265,7 @@ export const asyncRoutes = [{
             meta: {
                 title: '域名管理',
                 icon: 'web',
-                affix: true,
+
                 roles: ['admins', 'visitor', 'operation']
             }
         }]

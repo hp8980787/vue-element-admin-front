@@ -1,7 +1,7 @@
-import request from "@/utils/request";
+import request from '@/utils/request'
 export function getRolesList() {
-    return request({
-        url: 'roles',
-        method: 'get',
-    })
+  return request({
+    url: 'roles',
+    method: 'get'
+  })
 }
