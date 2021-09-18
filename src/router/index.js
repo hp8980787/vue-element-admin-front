@@ -205,6 +205,7 @@ export const asyncRoutes = [{
             name: 'databases.action',
             component: () =>
                 import ('@/views/router-bridge/bridge.vue'),
+            hidden: true,
             meta: {
                 noCache: true,
                 title: '数据库',
