@@ -6,6 +6,7 @@
     </el-col>
     <el-col :span="24">
       <el-table :data="domains">
+        <el-table-column label='id' prop="id"></el-table-column>
         <el-table-column label="name" prop="name" />
         <el-table-column label="网址" prop="url">
           <template slot-scope="scope">

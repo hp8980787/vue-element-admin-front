@@ -64,14 +64,25 @@ export default {
       this.domains = data;
       this.loading = false;
     },
-    async checkOrder(database) {
-      this.dialogOrderVisible = true;
-      this.loading = true;
-      const { data } = await request.get(`order-database`, {
-        params: { id: database.id },
-      });
-      this.loading = false;
-      console.log(data);
+     checkOrder(database) {
+       this.$router.push(`/orders/detail/${database.id}`);
+      // this.dialogOrderVisible = true;
+      // this.loading = true;
+      // request({
+      //   url: `order-database`,
+      //   method: "get",
+      //   params: {
+      //     id: database.id,
+      //   },
+      // timeout: 40 * 1000,
+      // })
+      //   .then((res) => {
+      //     console.log(res);
+      //     this.loading = false;
+      //   })
+      //   .catch((error) => {
+      //        this.loading = false;
+      //   });
     },
   },
 };

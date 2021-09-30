@@ -15,7 +15,7 @@
           <template slot-scope="scope">
             <span>
               <svg-icon
-                style="background-color: #606266;font-size:16px"
+                style="background-color: #606266; font-size: 16px"
                 :icon-class="scope.row.type_id | tableStatus"
               />
               {{ scope.row.type_id | tableStatus }}
@@ -39,8 +39,18 @@
             />
           </template>
           <template slot-scope="scope">
-            <el-button size="mini" type="primary">修改</el-button>
-            <el-button size="mini" type="danger">删除</el-button>
+            <el-button @click="editInit(scope.row)" size="mini" type="primary"
+              >修改</el-button
+            >
+            <el-popconfirm
+              @onConfirm="TablesDelete(scope.row.id)"
+              title="这是一段内容确定删除吗？"
+            >
+              <el-button slot="reference" size="mini" type="danger"
+                >删除</el-button
+              >
+            </el-popconfirm>
+
             <el-button size="mini" type="primary">分配录单格式</el-button>
           </template>
         </el-table-column>
@@ -62,8 +72,18 @@
       :title="title"
       v-loading="dialogLoading"
     >
-      <el-form :model="form" ref="form" label-width="100px" width="100%">
-        <el-form-item label="数据库选择" v-if="databases.length > 0">
+      <el-form
+        :model="form"
+        ref="form"
+        :rules="formRules"
+        label-width="100px"
+        width="100%"
+      >
+        <el-form-item
+          label="数据库选择"
+          v-if="databases.length > 0"
+          prop="database_id"
+        >
           <el-select
             filterable
             @change="getTableName"
@@ -78,7 +98,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item v-if="tables.length > 0" label="选择表">
+        <el-form-item v-if="form.database_id > 0" label="选择表" prop="name">
           <el-select @change="getTableInfo" v-model="form.name">
             <el-option
               v-for="(table, key) in tableName"
@@ -88,26 +108,41 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="表类型选择">
+        <el-form-item
+          v-if="form.database_id > 0"
+          label="表类型选择"
+          prop="type_id"
+        >
           <el-select v-model="form.type_id">
             <el-option label="购物车表" value="1"></el-option>
             <el-option label="订单表" value="2"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item v-if="columns.length>0" label="需要显示字段">
+        <el-form-item v-if="columns.length > 0" label="需要显示字段">
           <el-transfer
             :titles="['所有字段', '前台展示字段']"
             v-model="form.display_column"
             :data.sync="columns"
           ></el-transfer>
         </el-form-item>
-        <el-form-item label="时间字段">
+        <el-form-item
+          v-if="form.database_id > 0"
+          label="时间字段"
+          prop="time_column"
+        >
           <el-select v-model="form.time_column">
-            <el-option v-for="(column,key) in columns" :key="key" :label="column.label" :value="column.key"></el-option>
+            <el-option
+              v-for="(column, key) in columns"
+              :key="key"
+              :label="column.label"
+              :value="column.key"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item >
-          <el-button type="primary" @click="formSubmit" v-if="action==='add'">提交</el-button>
+        <el-form-item>
+          <el-button type="primary" @click="formSubmit" v-if="action === 'add'"
+            >提交</el-button
+          >
           <el-button type="primary" v-else>修改</el-button>
         </el-form-item>
       </el-form>
@@ -131,7 +166,7 @@ export default {
     return {
       tables: [],
       loading: true,
-      action:'add',
+      action: "add",
       total: 0,
       pageSize: 0,
       currentPage: 1,
@@ -146,6 +181,12 @@ export default {
       columns: [],
       isIndeterminate: true,
       checkAll: false,
+      formRules: {
+        database_id: [{ required: true, message: "必须", trigger: "blur" }],
+        name: [{ required: true, message: "必须", trigger: "blur" }],
+        type_id: [{ required: true, message: "必须", trigger: "blur" }],
+        time_column: [{ required: true, message: "必须", trigger: "blur" }],
+      },
     };
   },
   mounted() {
@@ -176,11 +217,26 @@ export default {
       this.title = "添加数据表";
       this.getDatabasesList();
     },
-    editInit() {},
+    editInit(data) {
+      this.form = data;
+      this.dialogVisible = true;
+      this.action = "edit";
+      this.title = "修改数据表";
+      this.getDatabasesList();
+    },
     async getDatabasesList() {
       const { data } = await request.get("/databases-all");
       this.databases = data;
       this.dialogLoading = false;
+    },
+    async TablesDelete(id) {
+      const data = await request.delete(`tables/${id}`);
+      if (data.code === 200) {
+        this.$message({ message: "删除成功!", type: "success" });
+        this.getTablesList();
+      } else {
+        this.$message({ message: "删除失败!", type: "error" });
+      }
     },
     getTableName() {
       this.dialogLoading = true;
@@ -217,9 +273,25 @@ export default {
           console.log(response);
         })
         .catch((error) => {});
-    },formSubmit(){
-      console.log(this.form);
-    }
+    },
+    formSubmit() {
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          request
+            .post("/tables", this.form)
+            .then((response) => {
+              if (response.code === 200) {
+                this.$message({ message: "添加成功!", type: "success" });
+                this.getTablesList();
+              }
+            })
+            .catch((error) => {});
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
   },
 };
 </script>

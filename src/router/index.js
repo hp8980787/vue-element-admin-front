@@ -252,6 +252,18 @@ export const asyncRoutes = [{
                 icon: 'order',
                 roles: ['admin']
             }
+        }, {
+            path: 'detail/:id',
+            name: 'orders.detail',
+            props: true,
+            hidden: true,
+            component: () =>
+                import ('@/views/orders/detail'),
+            meta: {
+                title: '订单管理',
+                icon: 'order',
+                roles: ['admin']
+            }
         }]
     }, {
         path: '/domains',
