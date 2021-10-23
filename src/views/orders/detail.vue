@@ -5,11 +5,41 @@
         <div id="main" style="width: 100%; height: 400px"></div>
       </div>
     </el-col> -->
+    
     <el-col :span="24">
+      <div class="info">
+        <h2>{{ database.url }}</h2>
+
+        <div class="user-div">
+          <h3>网站管理人员:</h3>
+          <ul class="user-info">
+            <li v-for="(user, key) in database.users" :key="key">
+              <el-tag>{{ user.name }}</el-tag>
+            </li>
+          </ul>
+        </div>
+        <el-select v-model="table_name" @change="getOrdersList">
+          <el-option
+            v-for="(table, key) in database.tables"
+            :key="key"
+            :label="table.name"
+            :value="table.name"
+          ></el-option>
+        </el-select>
+      </div>
+    </el-col>
+    <el-col :span="24" style="margin-top: 20px">
+      <div class="search">
+        <el-input
+          placeholder="搜索"
+          v-model="search"
+          @change="searchOrder"
+        >
+        </el-input>
+ 
+      </div>
       <el-table :data="data" border style="width: 100%">
         <el-table-column
-          v-bind:fixed="column === time_column"
-          :width="column === time_column ? '200px' : '100px'"
           v-for="(column, key) in columns"
           :key="key"
           :label="column"
@@ -17,8 +47,13 @@
         ></el-table-column>
       </el-table>
     </el-col>
-    <el-col :span="24" style="margin-top: 20px">
-      <el-pagination background layout="prev, pager, next" :total="1000">
+      <el-col :span="8" :offset="8" style="margin-top: 20px; margin-bottom: 20px">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="total"
+        @current-change="page"
+      >
       </el-pagination>
     </el-col>
   </el-row>
@@ -37,35 +72,44 @@ export default {
       data: [],
       time_column: "",
       time_columns: ["dd_time", "created_at", "time"],
+      table_name: "",
+      database: {},
+      total: 0,
+      current_page: 1,
+      search:''
     };
   },
   mounted() {
     // this.EchartsInit();
-
+    this.DatabaseInfo();
     // this.getColumn();
-    this.getOrdersList();
+    // this.getOrdersList();
   },
   methods: {
     getOrdersList() {
+      this.loading = true;
       request({
         url: `order-database`,
         method: "get",
         params: {
           id: this.id,
+          table_name: this.table_name,
+          page: this.current_page,
+          search:this.search,
         },
         timeout: 40 * 1000,
       })
         .then((res) => {
           this.loading = false;
           this.data = res.data.data;
+          this.total = res.data.total;
+          console.log(res);
           for (let i in this.data[0]) {
-            if (this.time_columns.indexOf(i)!=-1) {
+            if (this.time_columns.indexOf(i) != -1) {
               this.time_column = i;
             }
             this.columns.push(i);
           }
-
-          console.log(this.time_column, this.columns);
         })
         .catch((error) => {
           this.loading = false;
@@ -76,11 +120,24 @@ export default {
       // if (data.display_column == null) {
       this.columns = data.full_column;
       this.time_column = data.time_column;
-      console.log(this.time_column);
       // } else {
       // this.columns = data.display_column;
       // }
-      console.log(data); // this.loading = false;
+      // this.loading = false;
+    },
+    async DatabaseInfo() {
+      const { data } = await request.get(`/databases/${this.id}`);
+      this.loading = false;
+      this.database = data;
+    },
+    page(currentPage) {
+      this.current_page = currentPage;
+      this.getOrdersList();
+    },
+    searchOrder() {
+       if (this.table_name!=''){
+         this.getOrdersList();
+       }
     },
     EchartsInit() {
       let myChart = this.$echarts.init(document.getElementById("main"));
@@ -106,5 +163,35 @@ export default {
 };
 </script>
 
-<style>
+
+<style lang="scss" scoped>
+.info {
+  text-align: center;
+}
+.search {
+  width:200px;
+  margin: 10px 0 10px 10px;
+}
+.user-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+  h3 {
+    display: inline-block;
+    width: fit-content;
+    margin: 0;
+  }
+  ul {
+    list-style: none;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    li {
+      width: fit-content;
+      float: left;
+      margin-right: 10px;
+    }
+  }
+}
 </style>
